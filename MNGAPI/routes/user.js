@@ -21,7 +21,7 @@ var userRouter = function(app, config) {
                         'data': result[0]
                     })
                 } else {
-                    res.send({
+                    res.status(401).send({
                         'status': 'fail',
                         'data': null
                     })
