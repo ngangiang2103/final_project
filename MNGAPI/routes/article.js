@@ -29,21 +29,29 @@ var articleRouter = function(app, config) {
         MongoClient.connect(config.connectionString, function(err, db) {
             var articles = db.collection('article');
 
-            articles.aggregate([
-                { $match: { 'id': new ObjectId(id) } }
-            ], function(err, result) {
-                if (result.length > 0) {
-                    return res.send({
-                        'status': 'success',
-                        'data': result[0]
-                    })
-                } else {
-                    return res.send({
-                        'status': 'fail',
-                        'data': null
-                    })
-                }
-            })
+            try {
+                articles.aggregate([
+                    { $match: { 'id': new ObjectId(id) } }
+                ], function(err, result) {
+                    if (result.length > 0) {
+                        return res.send({
+                            'status': 'success',
+                            'data': result[0]
+                        })
+                    } else {
+                        return res.send({
+                            'status': 'fail',
+                            'data': null
+                        })
+                    }
+                })
+            }
+            catch(err) {
+               return res.send({
+                    'status': 'error',
+                    'message': err
+                }) 
+            }
         });
     })
 
